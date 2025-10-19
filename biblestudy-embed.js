@@ -197,29 +197,28 @@ body.bstudy-mounted{overflow-x:hidden}
     if (!body) return [`# ${heading}`];
 
     const blocks = expandSlideBlocks(body);
-    const isMobile = window.innerWidth <= 768;
-    const charLimit = isMobile ? 700 : 1300;
-    const blockLimit = isMobile ? 3 : 6;
-
+    const maxHeight = getMaxSlideHeight();
     const slideParts = [];
     let chunk = [];
-    let charCount = 0;
-    let partIndex = 1;
 
     blocks.forEach((block) => {
-      const blockLength = block.length;
-      if (chunk.length && (charCount + blockLength > charLimit || chunk.length >= blockLimit)) {
-        slideParts.push(buildSlideMarkdown(heading, chunk, partIndex));
-        partIndex += 1;
-        chunk = [];
-        charCount = 0;
-      }
       chunk.push(block);
-      charCount += blockLength;
+      const measured = measureSlideHeight(heading, chunk);
+
+      if (measured > maxHeight && chunk.length > 1) {
+        const overflow = chunk.pop();
+        slideParts.push(buildSlideMarkdown(heading, chunk, slideParts.length + 1));
+        chunk = [overflow];
+
+        if (measureSlideHeight(heading, chunk) > maxHeight) {
+          slideParts.push(buildSlideMarkdown(heading, chunk, slideParts.length + 1));
+          chunk = [];
+        }
+      }
     });
 
     if (chunk.length) {
-      slideParts.push(buildSlideMarkdown(heading, chunk, partIndex));
+      slideParts.push(buildSlideMarkdown(heading, chunk, slideParts.length + 1));
     }
 
     return slideParts;
@@ -228,6 +227,72 @@ body.bstudy-mounted{overflow-x:hidden}
   function buildSlideMarkdown(heading, blocks, partIndex) {
     const suffix = partIndex > 1 ? ' (cont.)' : '';
     return `# ${heading}${suffix}\n\n${blocks.join('\n\n')}`;
+  }
+
+  const measurementState = {
+    root: null,
+    cacheWidth: null,
+  };
+
+  function getMeasurementRoot() {
+    if (measurementState.root) return measurementState.root;
+
+    const root = document.createElement('div');
+    root.id = 'bstudy-measure-root';
+    Object.assign(root.style, {
+      position: 'fixed',
+      top: '0',
+      left: '0',
+      width: '100vw',
+      height: '100vh',
+      opacity: '0',
+      pointerEvents: 'none',
+      overflow: 'hidden',
+      zIndex: '-1',
+      visibility: 'hidden',
+    });
+
+    document.body.appendChild(root);
+    measurementState.root = root;
+    measurementState.cacheWidth = window.innerWidth;
+    return root;
+  }
+
+  function getMaxSlideHeight() {
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 800;
+    return viewportHeight - 32; // leave a bit of breathing room for rounding differences
+  }
+
+  function measureSlideHeight(heading, blocks) {
+    const root = getMeasurementRoot();
+
+    // If the viewport width has changed, clear cached content to avoid stale measurements
+    if (measurementState.cacheWidth !== window.innerWidth) {
+      root.textContent = '';
+      measurementState.cacheWidth = window.innerWidth;
+    }
+
+    const slide = document.createElement('div');
+    slide.className = 'bstudy-slide';
+    slide.style.position = 'relative';
+    slide.style.minHeight = 'auto';
+    slide.style.height = 'auto';
+    slide.style.scrollSnapAlign = 'unset';
+
+    const content = document.createElement('div');
+    content.className = 'slide-content';
+    content.innerHTML = simpleMarkdown(`# ${heading}\n\n${blocks.join('\n\n')}`);
+
+    slide.appendChild(content);
+    root.appendChild(slide);
+
+    const slideStyles = window.getComputedStyle(slide);
+    const paddingTop = parseFloat(slideStyles.paddingTop) || 0;
+    const paddingBottom = parseFloat(slideStyles.paddingBottom) || 0;
+    const totalHeight = content.scrollHeight + paddingTop + paddingBottom;
+
+    root.removeChild(slide);
+    return totalHeight;
   }
 
   function expandSlideBlocks(body) {
@@ -382,6 +447,8 @@ body.bstudy-mounted{overflow-x:hidden}
     const container = document.createElement('div');
     container.className = 'bstudy-container';
     container.id = 'bstudy-container';
+    container.style.opacity = '0';
+    container.style.transition = 'opacity 0.2s ease';
 
     // Replace mount target
     mountAt.replaceWith(controls, container);
@@ -408,6 +475,10 @@ body.bstudy-mounted{overflow-x:hidden}
 
       slide.appendChild(content);
       container.appendChild(slide);
+    });
+
+    requestAnimationFrame(() => {
+      container.style.opacity = '1';
     });
 
     // Init counters & listeners
