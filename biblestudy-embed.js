@@ -199,26 +199,33 @@ body.bstudy-mounted{overflow-x:hidden}
     const blocks = expandSlideBlocks(body);
     const maxHeight = getMaxSlideHeight();
     const slideParts = [];
-    let chunk = [];
+    let remainingBlocks = blocks.slice();
+    let partIndex = 1;
 
-    blocks.forEach((block) => {
-      chunk.push(block);
-      const measured = measureSlideHeight(heading, chunk);
+    while (remainingBlocks.length) {
+      let attemptBlocks = remainingBlocks.slice();
+      let overflow = [];
 
-      if (measured > maxHeight && chunk.length > 1) {
-        const overflow = chunk.pop();
-        slideParts.push(buildSlideMarkdown(heading, chunk, slideParts.length + 1));
-        chunk = [overflow];
+      while (attemptBlocks.length) {
+        const measured = measureSlideHeight(heading, attemptBlocks);
+        if (measured <= maxHeight) break;
 
-        if (measureSlideHeight(heading, chunk) > maxHeight) {
-          slideParts.push(buildSlideMarkdown(heading, chunk, slideParts.length + 1));
-          chunk = [];
+        if (attemptBlocks.length === 1) {
+          // Can't shrink further; keep the single oversized block together.
+          break;
         }
-      }
-    });
 
-    if (chunk.length) {
-      slideParts.push(buildSlideMarkdown(heading, chunk, slideParts.length + 1));
+        const lastBlock = attemptBlocks.pop();
+        overflow.unshift(lastBlock);
+      }
+
+      if (!attemptBlocks.length && overflow.length) {
+        attemptBlocks = [overflow.shift()];
+      }
+
+      slideParts.push(buildSlideMarkdown(heading, attemptBlocks, partIndex));
+      partIndex += 1;
+      remainingBlocks = overflow;
     }
 
     return slideParts;
