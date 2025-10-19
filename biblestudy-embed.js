@@ -129,9 +129,9 @@ body.bstudy-mounted{overflow-x:hidden}
 .bstudy-btn:hover,.bstudy-upload:hover{background:var(--bg-tertiary);transform:translateY(-1px)}
 .bstudy-counter{background:var(--bg-secondary);border:1px solid var(--border-color);color:var(--text-secondary);padding:.5rem 1rem;border-radius:.5rem;font-size:.875rem;font-weight:500}
 #bstudy-file{display:none}
-.bstudy-container{height:100vh;overflow-y:scroll;scroll-snap-type:y mandatory;scroll-behavior:smooth;background:var(--bg-primary)}
-.bstudy-slide{min-height:100vh;scroll-snap-align:start;display:flex;align-items:center;justify-content:center;padding:3rem 2rem}
-.bstudy-slide .slide-content{max-width:800px;width:100%;padding-top:6rem}
+.bstudy-container{height:100vh;overflow-y:auto;scroll-snap-type:y mandatory;scroll-behavior:smooth;background:var(--bg-primary);scroll-padding-top:0}
+.bstudy-slide{min-height:100vh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:4rem 2rem 5rem}
+.bstudy-slide .slide-content{max-width:900px;width:100%;margin:0 auto;background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:1rem;box-shadow:0 18px 40px var(--shadow);padding:3rem 2.5rem}
 .bstudy-slide h1{font-size:2.5rem;font-weight:700;color:var(--accent-primary);margin-bottom:2rem;line-height:1.2}
 .bstudy-slide h2{font-size:1.875rem;font-weight:600;color:var(--text-primary);margin:2rem 0 1rem}
 .bstudy-slide h3{font-size:1.5rem;font-weight:600;color:var(--text-primary);margin:1.5rem 0 .75rem}
@@ -163,7 +163,8 @@ body.bstudy-mounted{overflow-x:hidden}
  .bstudy-slide h2{font-size:1.5rem}
  .bstudy-slide p,.bstudy-slide li{font-size:1rem}
  .bstudy-controls{top:.5rem;right:.5rem;flex-wrap:wrap}
- .bstudy-slide{padding:2rem 1rem}
+ .bstudy-slide{padding:3rem 1.25rem 4rem}
+ .bstudy-slide .slide-content{padding:2.5rem 1.75rem}
 }
 `;
 
@@ -443,12 +444,12 @@ body.bstudy-mounted{overflow-x:hidden}
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
         e.preventDefault();
         if (currentSlide < slides.length - 1) {
-          slides[currentSlide + 1].scrollIntoView({behavior:'smooth'});
+          slides[currentSlide + 1].scrollIntoView({behavior:'smooth',block:'start'});
         }
       } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
         e.preventDefault();
         if (currentSlide > 0) {
-          slides[currentSlide - 1].scrollIntoView({behavior:'smooth'});
+          slides[currentSlide - 1].scrollIntoView({behavior:'smooth',block:'start'});
         }
       }
     });
@@ -463,8 +464,8 @@ body.bstudy-mounted{overflow-x:hidden}
       const dx = tx - ex, dy = ty - ey, thr = 50;
       const slides = $$('.bstudy-slide', container);
       if (Math.abs(dy) > Math.abs(dx)) {
-        if (dy > thr && currentSlide < slides.length - 1) slides[currentSlide + 1].scrollIntoView({behavior:'smooth'});
-        else if (dy < -thr && currentSlide > 0) slides[currentSlide - 1].scrollIntoView({behavior:'smooth'});
+        if (dy > thr && currentSlide < slides.length - 1) slides[currentSlide + 1].scrollIntoView({behavior:'smooth',block:'start'});
+        else if (dy < -thr && currentSlide > 0) slides[currentSlide - 1].scrollIntoView({behavior:'smooth',block:'start'});
       }
     });
 
@@ -476,9 +477,11 @@ body.bstudy-mounted{overflow-x:hidden}
     }
 
     function updateSlideCounter() {
-      currentSlide = Math.round(container.scrollTop / window.innerHeight);
+      const viewportHeight = container.clientHeight || window.innerHeight;
       const totalSlides = $$('.bstudy-slide', container).length;
-      $('#bstudy-counter').textContent = `${Math.min(currentSlide+1,totalSlides)} / ${totalSlides}`;
+      const index = Math.round(container.scrollTop / viewportHeight);
+      currentSlide = Math.min(Math.max(index, 0), Math.max(totalSlides - 1, 0));
+      $('#bstudy-counter').textContent = `${totalSlides ? currentSlide + 1 : 0} / ${totalSlides}`;
     }
 
     function expandPassage(id) {
