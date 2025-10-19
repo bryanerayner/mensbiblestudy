@@ -65,8 +65,12 @@
 
     // Convert ordered lists (grouped)
     md = md.replace(/^(?:\d+\.\s+.*\n?)+/gm, (block) => {
-      const items = block.trim().split('\n').map(l => l.replace(/^\d+\.\s+/, '').trim());
-      return `<ol>${items.map(i=>`<li>${inlineMarkdown(i)}</li>`).join('')}</ol>\n`;
+      const lines = block.trim().split('\n');
+      const startMatch = lines[0].match(/^(\d+)\.\s+/);
+      const start = startMatch ? Number(startMatch[1]) : 1;
+      const items = lines.map(l => l.replace(/^\d+\.\s+/, '').trim());
+      const startAttr = start > 1 ? ` start="${start}"` : '';
+      return `<ol${startAttr}>${items.map(i=>`<li>${inlineMarkdown(i)}</li>`).join('')}</ol>\n`;
     });
 
     // Convert unordered lists (grouped)
@@ -173,10 +177,191 @@ body.bstudy-mounted{overflow-x:hidden}
 
   // ---------- Core rendering ----------
   function splitSlides(md) {
-    // Split by H1 markers (# ) while keeping the first section if it doesn't start with #.
-    const parts = md.split(/^#\s+/gm).filter(s => s.trim() !== '');
-    // Add back the removed "# " to each slide (so headings render)
-    return parts.map(p => `# ${p}`);
+    const sections = md.split(/^#\s+/gm).filter(s => s.trim() !== '');
+    const slides = sections.map(section => `# ${section}`);
+    const finalSlides = [];
+    slides.forEach((slide) => {
+      finalSlides.push(...splitSingleSlide(slide));
+    });
+    return finalSlides;
+  }
+
+  function splitSingleSlide(slideMd) {
+    const trimmed = slideMd.trim();
+    const headingMatch = trimmed.match(/^#\s+(.+?)(?:\n+|$)/);
+    if (!headingMatch) return [slideMd];
+
+    const heading = headingMatch[1].trim();
+    const body = trimmed.slice(headingMatch[0].length).trim();
+    if (!body) return [`# ${heading}`];
+
+    const blocks = expandSlideBlocks(body);
+    const isMobile = window.innerWidth <= 768;
+    const charLimit = isMobile ? 700 : 1300;
+    const blockLimit = isMobile ? 3 : 6;
+
+    const slideParts = [];
+    let chunk = [];
+    let charCount = 0;
+    let partIndex = 1;
+
+    blocks.forEach((block) => {
+      const blockLength = block.length;
+      if (chunk.length && (charCount + blockLength > charLimit || chunk.length >= blockLimit)) {
+        slideParts.push(buildSlideMarkdown(heading, chunk, partIndex));
+        partIndex += 1;
+        chunk = [];
+        charCount = 0;
+      }
+      chunk.push(block);
+      charCount += blockLength;
+    });
+
+    if (chunk.length) {
+      slideParts.push(buildSlideMarkdown(heading, chunk, partIndex));
+    }
+
+    return slideParts;
+  }
+
+  function buildSlideMarkdown(heading, blocks, partIndex) {
+    const suffix = partIndex > 1 ? ' (cont.)' : '';
+    return `# ${heading}${suffix}\n\n${blocks.join('\n\n')}`;
+  }
+
+  function expandSlideBlocks(body) {
+    const codeFences = [];
+    let protectedBody = body.replace(/```[\s\S]*?```/g, (match) => {
+      const token = `__SPLIT_CODE_${codeFences.length}__`;
+      codeFences.push(match);
+      return token;
+    });
+
+    const rawBlocks = protectedBody
+      .split(/\n{2,}/)
+      .map((block) => block.trim())
+      .filter(Boolean);
+
+    const expanded = rawBlocks.flatMap((block) => {
+      const restored = block.replace(/__SPLIT_CODE_(\d+)__/g, (_m, idx) => codeFences[Number(idx)]);
+      return splitBlock(restored);
+    });
+
+    return expanded.length ? expanded : [body.trim()];
+  }
+
+  function splitBlock(block) {
+    if (!block) return [];
+    if (/^```/.test(block)) return [block];
+    if (/^\s*>/.test(block)) return splitBlockquote(block);
+    if (/^\s*[-*]\s+/.test(block) || /^\s*\d+\.\s+/.test(block)) return splitListBlock(block);
+    return splitParagraphBlock(block);
+  }
+
+  function splitListBlock(block) {
+    const isMobile = window.innerWidth <= 768;
+    const maxItems = isMobile ? 4 : 8;
+    const maxChars = isMobile ? 600 : 1200;
+    const lines = block.split('\n');
+    const items = [];
+    let current = [];
+    let baseIndent = null;
+
+    lines.forEach((line) => {
+      const match = line.match(/^(\s*)([-*]|\d+\.)\s+/);
+      if (match) {
+        const indent = match[1].length;
+        if (baseIndent === null) baseIndent = indent;
+        if (indent === baseIndent) {
+          if (current.length) items.push(current.join('\n'));
+          current = [line];
+          return;
+        }
+      }
+      current.push(line);
+    });
+    if (current.length) items.push(current.join('\n'));
+    if (!items.length) return [block];
+
+    const groups = [];
+    let group = [];
+    let charCount = 0;
+    items.forEach((item) => {
+      const itemLength = item.length;
+      if (group.length && (group.length >= maxItems || charCount + itemLength > maxChars)) {
+        groups.push(group.join('\n'));
+        group = [];
+        charCount = 0;
+      }
+      group.push(item);
+      charCount += itemLength;
+    });
+    if (group.length) groups.push(group.join('\n'));
+    return groups;
+  }
+
+  function splitBlockquote(block) {
+    const inner = block.replace(/^>\s?/gm, '').trim();
+    const segments = splitParagraphBlock(inner);
+    return segments.map((segment) => segment
+      .split('\n')
+      .map((line) => (line.trim().length ? `> ${line}` : '>'))
+      .join('\n'));
+  }
+
+  function splitParagraphBlock(block) {
+    const isMobile = window.innerWidth <= 768;
+    const charLimit = isMobile ? 400 : 800;
+    if (block.length <= charLimit) return [block];
+
+    const { text, tokens } = protectInline(block);
+    const sentences = text.split(/(?<=[.!?])\s+(?=[A-Z0-9])/);
+    const segments = [];
+
+    if (sentences.length > 1) {
+      let current = '';
+      sentences.forEach((sentence) => {
+        const candidate = current ? `${current} ${sentence}` : sentence;
+        if (candidate.length > charLimit && current) {
+          segments.push(current);
+          current = sentence;
+        } else if (candidate.length > charLimit) {
+          segments.push(candidate);
+          current = '';
+        } else {
+          current = candidate;
+        }
+      });
+      if (current) segments.push(current);
+    }
+
+    if (!segments.length) {
+      let remaining = text.trim();
+      while (remaining.length > charLimit) {
+        const slice = remaining.slice(0, charLimit);
+        const cut = Math.max(slice.lastIndexOf(' '), slice.lastIndexOf('\n'));
+        const pivot = cut > 50 ? cut : charLimit;
+        segments.push(remaining.slice(0, pivot));
+        remaining = remaining.slice(pivot).trimStart();
+      }
+      if (remaining) segments.push(remaining);
+    }
+
+    return segments.map((segment) => restoreInline(segment.trim(), tokens));
+  }
+
+  function protectInline(str) {
+    const tokens = [];
+    const protectedStr = str.replace(/(`[^`]+`|\*\*[^*]+\*\*|__[^_]+__|\*[^*]+\*|_[^_]+_)/g, (match) => {
+      const token = `__INLINE_${tokens.length}__`;
+      tokens.push(match);
+      return token;
+    });
+    return { text: protectedStr, tokens };
+  }
+
+  function restoreInline(str, tokens) {
+    return str.replace(/__INLINE_(\d+)__/g, (_m, idx) => tokens[Number(idx)]);
   }
 
   function renderSlides(md, mountAt) {
