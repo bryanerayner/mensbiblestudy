@@ -77,6 +77,13 @@
         max-height: 100vh;
     }
 
+    #qr-share-code,
+    #qr-share-code canvas,
+    #qr-share-code img {
+      margin: 0 auto;
+      display: block;
+    }
+
     .qr-share-close {
       position: absolute;
       top: 0.75rem;
