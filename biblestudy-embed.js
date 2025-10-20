@@ -196,8 +196,6 @@ body.bstudy-mounted{overflow-x:hidden}
     controls.innerHTML = `
       <div class="bstudy-counter" id="bstudy-counter">1 / 1</div>
       <button class="bstudy-btn" id="bstudy-theme"><span id="bstudy-theme-icon">🌙</span><span id="bstudy-theme-text">Dark</span></button>
-      <label class="bstudy-upload" for="bstudy-file">📄 Load Markdown</label>
-      <input type="file" id="bstudy-file" accept=".md,.txt">
     `;
 
     const container = document.createElement('div');
@@ -352,7 +350,6 @@ body.bstudy-mounted{overflow-x:hidden}
       currentSlide = Math.round(container.scrollTop / window.innerHeight);
       const totalSlides = $$('.bstudy-slide', container).length;
       $('#bstudy-counter').textContent = `${Math.min(currentSlide+1,totalSlides)} / ${totalSlides}`;
-      currentBullet = 0;
       updateBulletVisibility();
     }
 
