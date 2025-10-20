@@ -64,18 +64,18 @@
       .replace(/^#\s+(.*)$/gm,  (_m, t) => `<h1>${inlineMarkdown(t)}</h1>`);
 
     // Convert ordered lists (grouped)
-    md = md.replace(/^(?:\d+\.\s+.*\n?)+/gm, (block) => {
+    md = md.replace(/^(?:\s*\d+\.\s+.*\n?)+/gm, (block) => {
       const lines = block.trim().split('\n');
       const startMatch = lines[0].match(/^(\d+)\.\s+/);
       const start = startMatch ? Number(startMatch[1]) : 1;
-      const items = lines.map(l => l.replace(/^\d+\.\s+/, '').trim());
+      const items = lines.map(l => l.replace(/^\s*\d+\.\s+/, '').trim());
       const startAttr = start > 1 ? ` start="${start}"` : '';
       return `<ol${startAttr}>${items.map(i=>`<li>${inlineMarkdown(i)}</li>`).join('')}</ol>\n`;
     });
 
     // Convert unordered lists (grouped)
-    md = md.replace(/^(?:[-*]\s+.*\n?)+/gm, (block) => {
-      const items = block.trim().split('\n').map(l => l.replace(/^[-*]\s+/, '').trim());
+    md = md.replace(/^(?:\s*[-*]\s+.*\n?)+/gm, (block) => {
+      const items = block.trim().split('\n').map(l => l.replace(/^\s*[-*]\s+/, '').trim());
       return `<ul>${items.map(i=>`<li>${inlineMarkdown(i)}</li>`).join('')}</ul>\n`;
     });
 
