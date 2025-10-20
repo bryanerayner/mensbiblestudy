@@ -125,10 +125,9 @@
 html,body{background:var(--bg-primary);color:var(--text-primary)}
 body.bstudy-mounted{overflow:hidden}
 .bstudy-controls{position:fixed;top:.75rem;right:.75rem;z-index:100000;display:flex;align-items:center;gap:.35rem;padding:.35rem .5rem;border-radius:999px;background:var(--bg-secondary);background:color-mix(in srgb,var(--bg-secondary) 70%,transparent);box-shadow:0 10px 30px var(--shadow);backdrop-filter:blur(12px)}
-.bstudy-btn,.bstudy-upload{background:transparent;border:none;color:var(--text-primary);padding:.35rem .6rem;border-radius:999px;cursor:pointer;font-size:.85rem;line-height:1;font-weight:600;transition:background .2s ease,color .2s ease;display:flex;align-items:center;gap:.35rem}
-.bstudy-btn:hover,.bstudy-upload:hover{background:var(--bg-tertiary);background:color-mix(in srgb,var(--bg-tertiary) 55%,transparent)}
+.bstudy-btn{background:transparent;border:none;color:var(--text-primary);padding:.35rem .6rem;border-radius:999px;cursor:pointer;font-size:.85rem;line-height:1;font-weight:600;transition:background .2s ease,color .2s ease;display:flex;align-items:center;gap:.35rem}
+.bstudy-btn:hover{background:var(--bg-tertiary);background:color-mix(in srgb,var(--bg-tertiary) 55%,transparent)}
 .bstudy-counter{padding:.35rem .6rem;border-radius:999px;font-size:.75rem;font-weight:600;color:var(--text-secondary);background:transparent}
-#bstudy-file{display:none}
 .bstudy-container{height:100vh;overflow-y:auto;scroll-snap-type:y mandatory;scroll-behavior:smooth;background:var(--bg-primary);scroll-padding-top:0}
 .bstudy-container::-webkit-scrollbar{width:.5rem}
 .bstudy-container::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--text-muted) 35%,transparent);border-radius:999px}
@@ -462,8 +461,6 @@ body.bstudy-mounted{overflow:hidden}
     controls.innerHTML = `
       <div class="bstudy-counter" id="bstudy-counter">1 / 1</div>
       <button class="bstudy-btn" id="bstudy-theme"><span id="bstudy-theme-icon">🌙</span><span id="bstudy-theme-text">Dark</span></button>
-      <label class="bstudy-upload" for="bstudy-file">📄 Load Markdown</label>
-      <input type="file" id="bstudy-file" accept=".md,.txt">
     `;
 
     const container = document.createElement('div');
@@ -513,14 +510,6 @@ body.bstudy-mounted{overflow:hidden}
       htmlEl.setAttribute('data-theme', theme);
       localStorage.setItem('bstudy-theme', theme);
       updateThemeButton(theme);
-    });
-
-    // File loader
-    $('#bstudy-file').addEventListener('change', async (e) => {
-      const f = e.target.files?.[0];
-      if (!f) return;
-      const text = await f.text();
-      renderSlides(text, container); // re-render in place
     });
 
     // Click handlers for [Bible] expand buttons (event delegation)
