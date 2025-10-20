@@ -1,7 +1,8 @@
-```markdown
-# Prophecy
+---
 
-## Prophecy is Old and New
+# **Prophecy**
+
+## *Prophecy is Old and New*
 
 Old Testament
  - Abraham
@@ -14,7 +15,9 @@ New Testament
  - Stephen
  - Agabus
 
-# Abraham
+---
+
+# **Abraham**
  - Hears God
  - Given the message of our salvation
  - Given promises and miracles
@@ -25,7 +28,9 @@ New Testament
 [Bible: Genesis 17:1-27]
 [Bible: Genesis 22:1-18]
 
-# Samuel
+---
+
+# **Samuel**
  - A child born in answer to prayer
  - Prophesies death against Eli the Priest
  - Known as "The Seer"
@@ -38,7 +43,9 @@ New Testament
 [Bible: 1 Samuel 10:1-27]
 [Bible: 1 Samuel 16:1-23]
 
-# Elijah
+---
+
+# **Elijah**
  - Multiplied food
  - Resurrected a boy
  - Controlled the weather
@@ -48,27 +55,35 @@ New Testament
 [Bible: 1 Kings 17:1-24]
 [Bible: 1 Kings 18:1-46]
 
-# Anna
+---
+
+# **Anna**
  - Told she would see Jesus
  - Speaks to Mary and Joseph about Him
 
 [Bible: Luke 2:36-38]
 
-# Stephen
+---
+
+# **Stephen**
  - Preaches the gospel
  - Sees Christ as he dies, dies while prophesying
 
 [Bible: Acts 6:8-15]
 [Bible: Acts 7:1-60]
 
-# Agabus
+---
+
+# **Agabus**
  - Warns of a great famine coming to the land
  - Tells Paul he will be bound in chains
 
 [Bible: Acts 11:27-30]
 [Bible: Acts 21:10-14]
 
-# What is Prophecy?
+---
+
+# **What is Prophecy?**
  - Messages from God;
  - The prophet speaks, acts, or writes
  - God confirms his message
@@ -76,26 +91,32 @@ New Testament
 [Bible: Deuteronomy 18:15-22]
 [Bible: 1 Corinthians 14:1-5]
 
-## Back to the Future
+/////Back to the Future
  - George & Lorraine, perfect for each other
  - How it begins, can set the stage for pain or blessing
  
-## The Hobbit
+/////The Hobbit
  - The son, looking at the Father, allows the arrows to be loosed into the heart of the dragon, as long as he does not look away from the Father.
  - I am still living in this message.
 
-# Am I crazy?
+---
+
+# **Am I crazy?**
  - Did God really use movies to speak to me?
  - God spoke to me; but used the images I was seeing to drive the message deeper into my soul.
 
-# Jeremiah
+---
+
+# **Jeremiah**
  - Jeremiah 1 - Example of how to prophesy.
   - Almond tree - Watching.
   - God often uses rhyme in prophesy.
 
 [Bible: Jeremiah 1:1-19]
 
-# Is it for today?
+---
+
+# **Is it for today?**
  - We are explicitly warned not to despise it
  - We are encouraged to desire it
  - We all can prophesy; we have the mind of Christ
@@ -105,7 +126,9 @@ New Testament
 [Bible: 1 Corinthians 14:39]
 [Bible: 1 Corinthians 2:6-16]
 
-# Spiritual Gifts
+---
+
+# **Spiritual Gifts**
  - The gifts did not cease with the Apostles
  - We are encouraged to prophesy _because it edifies others_
  - We are encouraged to prophesy _to evangelize_.
@@ -115,7 +138,9 @@ New Testament
 [Bible: Romans 12:3-8]
 [Bible: Ephesians 4:7-16]
 
-# How can we?
+---
+
+# **How can we?**
  - The mind of Christ
  - We are one spirit with the Lord.
  - When we sin sexually, we unite His spirit with evil.
@@ -124,7 +149,9 @@ New Testament
 [Bible: 1 Corinthians 2:6-16]
 [Bible: 1 Corinthians 6:12-20]
 
-# False Prophets - Jeremiah
+---
+
+# **False Prophets - Jeremiah**
  - Jeremiah was given a yoke to wear
  - A false prophet broke the yoke
  - God cursed the false prophet.
@@ -132,7 +159,9 @@ New Testament
 [Bible: Jeremiah 27:1-22]
 [Bible: Jeremiah 28:1-17]
 
-# False Prophets
+---
+
+# **False Prophets**
  - Seek dreams
  - Make dreams for themselves.
  - Want to prophesy more than they want God
@@ -144,7 +173,9 @@ New Testament
 [Bible: Jeremiah 23:22]
 [Bible: Deuteronomy 13:1-5]
 
-# Testing the prophets
+---
+
+# **Testing the prophets**
  - Deut 13. If they lead you to another God, they are false.
  - Unfilfilled blessings or curses could just be you making God change his decision.
  - The thing to fear is the prophet
@@ -153,7 +184,9 @@ New Testament
 [Bible: Deuteronomy 18:15-22]
 [Bible: 1 John 4:1-6]
 
-# Love vs. Power
+---
+
+# **Love vs. Power**
  - Power & Love
  - Healing follows compassion
  - Prophesy follows God's unction
@@ -164,7 +197,9 @@ New Testament
 [Bible: Mark 6:30-44]
 [Bible: Jeremiah 23:22]
 
-# What to expect
+---
+
+# **What to expect**
  - God will speak through the church to you
  - God will foretell his actions on the earth
  - God may use you to bless
@@ -173,7 +208,9 @@ New Testament
 [Bible: Amos 3:7]
 [Bible: Ephesians 4:11-16]
 
-# Personal Revelation
+---
+
+# **Personal Revelation**
  - A man spoke to me during a prayer service, holding my hands
    - "There is healing in these hands"
  - I sought to understand the gifts of the Spirit
@@ -186,7 +223,9 @@ New Testament
 [Bible: 1 Corinthians 12:4-11]
 [Bible: Mark 16:15-18]
 
-# Old Wells re-tapped prophecy.
+---
+
+# **Old Wells re-tapped prophecy.**
 
 [Bible: Genesis 26:12-33]
 [Bible: Isaiah 12:1-6]
