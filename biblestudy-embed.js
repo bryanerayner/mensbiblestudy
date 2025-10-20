@@ -100,6 +100,11 @@
     text = escapeHtml(text);
     // Inline code
     text = text.replace(/`([^`]+)`/g, (_m, c) => `<code>${c}</code>`);
+    // Links [text](url)
+    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, label, url) => {
+      const safeUrl = url.replace(/"/g, '&quot;');
+      return `<a href="${safeUrl}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+    });
     // Bold **text**
     text = text.replace(/\*\*([^*]+)\*\*/g, (_m, c) => `<strong>${c}</strong>`);
     // Italic *text*
@@ -131,7 +136,7 @@ body.bstudy-mounted{overflow:hidden}
 .bstudy-container{height:100vh;overflow-y:auto;scroll-snap-type:y mandatory;scroll-behavior:smooth;background:var(--bg-primary);scroll-padding-top:0}
 .bstudy-container::-webkit-scrollbar{width:.5rem}
 .bstudy-container::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--text-muted) 35%,transparent);border-radius:999px}
-.bstudy-slide{min-height:100vh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(1.5rem,3vw,3rem) clamp(1.2rem,4vw,4rem)}
+.bstudy-slide{min-height:80vh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(1.5rem,3vw,3rem) clamp(1.2rem,4vw,4rem)}
 .bstudy-slide .slide-content{max-width:min(1100px,95vw);width:100%;margin:0 auto;display:flex;flex-direction:column;justify-content:center;gap:clamp(.75rem,1.6vw,1.75rem);padding:clamp(1.25rem,2.8vw,2.75rem);background:transparent;border:none;box-shadow:none}
 .bstudy-slide h1{font-size:clamp(2.4rem,5vw,3.4rem);font-weight:700;color:var(--accent-primary);margin-bottom:.5rem;line-height:1.08;text-wrap:balance}
 .bstudy-slide h2{font-size:clamp(1.65rem,3.4vw,2.4rem);font-weight:650;color:var(--text-primary);margin-top:clamp(1rem,2vw,1.5rem);margin-bottom:.25rem;text-wrap:balance}
