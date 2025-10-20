@@ -46,6 +46,10 @@
     .qr-share-overlay.visible {
       opacity: 1;
       pointer-events: auto;
+
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 9999999999999999;
     }
 
     .qr-share-content {
@@ -60,6 +64,17 @@
       align-items: center;
       gap: 1.25rem;
       box-shadow: 0 24px 50px rgba(15, 23, 42, 0.35);
+
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        align-content: center;
+        vertical-align: center;
+        box-sizing: border-box;
+        padding: 0;
+        max-width: 100vw;
+        max-height: 100vh;
     }
 
     .qr-share-close {
