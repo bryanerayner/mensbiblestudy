@@ -135,7 +135,7 @@ body.bstudy-mounted{overflow:hidden}
 .bstudy-btn{background:transparent;border:none;color:var(--text-primary);padding:.35rem .6rem;border-radius:999px;cursor:pointer;font-size:.85rem;line-height:1;font-weight:600;transition:background .2s ease,color .2s ease;display:flex;align-items:center;gap:.35rem}
 .bstudy-btn:hover{background:var(--bg-tertiary);background:color-mix(in srgb,var(--bg-tertiary) 55%,transparent)}
 .bstudy-counter{padding:.35rem .6rem;border-radius:999px;font-size:.75rem;font-weight:600;color:var(--text-secondary);background:transparent}
-.bstudy-container{height:100vh;overflow-y:auto;scroll-behavior:smooth;background:var(--bg-primary);scroll-padding-top:0;scroll-snap-type:none!important}
+.bstudy-container{height:100vh;overflow-y:auto;background:var(--bg-primary);scroll-padding-top:0;scroll-snap-type:none!important}
 .bstudy-container::-webkit-scrollbar{width:.5rem}
 .bstudy-container::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--text-muted) 35%,transparent);border-radius:999px}
 .bstudy-slide{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(1.5rem,3vw,3rem) clamp(1.2rem,4vw,4rem);scroll-snap-align:none!important;scroll-snap-stop:normal!important}
@@ -525,37 +525,6 @@ body.bstudy-mounted{overflow:hidden}
       const btn = e.target.closest?.('.expand-btn');
       if (btn && btn.hasAttribute('data-expand')) {
         expandPassage(btn.getAttribute('data-expand'));
-      }
-    });
-
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      const slides = $$('.bstudy-slide', container);
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-        e.preventDefault();
-        if (currentSlide < slides.length - 1) {
-          slides[currentSlide + 1].scrollIntoView({behavior:'smooth',block:'start'});
-        }
-      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-        e.preventDefault();
-        if (currentSlide > 0) {
-          slides[currentSlide - 1].scrollIntoView({behavior:'smooth',block:'start'});
-        }
-      }
-    });
-
-    // Touch swipe (navigate between slides)
-    let tx=0, ty=0, ex=0, ey=0;
-    container.addEventListener('touchstart', (e) => {
-      tx = e.changedTouches[0].screenX; ty = e.changedTouches[0].screenY;
-    });
-    container.addEventListener('touchend', (e) => {
-      ex = e.changedTouches[0].screenX; ey = e.changedTouches[0].screenY;
-      const dx = tx - ex, dy = ty - ey, thr = 50;
-      const slides = $$('.bstudy-slide', container);
-      if (Math.abs(dy) > Math.abs(dx)) {
-        if (dy > thr && currentSlide < slides.length - 1) slides[currentSlide + 1].scrollIntoView({behavior:'smooth',block:'start'});
-        else if (dy < -thr && currentSlide > 0) slides[currentSlide - 1].scrollIntoView({behavior:'smooth',block:'start'});
       }
     });
 
