@@ -43,9 +43,11 @@
     });
     md = md.replace(/\[YouTube:\s*([^\]]+)\]/g, (m, videoId) => {
       const id = `__WIDGET_${widgets.length}__`;
+      const cleanedId = videoId.trim();
+      const url = cleanedId.includes('://') ? cleanedId : `https://www.youtube.com/watch?v=${cleanedId}`;
       widgets.push(
-        `<div class="youtube-embed">
-          <iframe src="https://www.youtube.com/embed/${videoId.trim()}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        `<div class="youtube-link">
+          <a href="${url}" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
         </div>`
       );
       return id;
@@ -162,8 +164,9 @@ body.bstudy-mounted{overflow:hidden}
 .passage-fullscreen-content{max-width:800px;margin:0 auto}
 .bstudy-close{position:fixed;top:1rem;right:1rem;background:var(--accent-primary);color:#fff;border:none;padding:.75rem 1.5rem;border-radius:.5rem;cursor:pointer;font-size:1rem;font-weight:600;z-index:200001;transition:all .2s ease}
 .bstudy-close:hover{background:var(--accent-secondary);transform:translateY(-1px)}
-.youtube-embed{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;margin:1rem 0;border-radius:.9rem;box-shadow:0 4px 16px var(--shadow)}
-.youtube-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:none;border-radius:.75rem}
+.youtube-link{margin:1rem 0}
+.youtube-link a{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.1rem;border-radius:.6rem;background:var(--accent-primary);color:#fff;text-decoration:none;font-weight:600;transition:background .2s ease,transform .2s ease}
+.youtube-link a:hover{background:var(--accent-secondary);transform:translateY(-1px)}
 @media (max-width:768px){
  .bstudy-controls{top:.5rem;right:.5rem;flex-wrap:wrap;gap:.25rem;padding:.3rem .45rem}
  .bstudy-counter{display:none}
