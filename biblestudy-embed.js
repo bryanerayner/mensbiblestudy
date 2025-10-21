@@ -135,10 +135,10 @@ body.bstudy-mounted{overflow:hidden}
 .bstudy-btn{background:transparent;border:none;color:var(--text-primary);padding:.35rem .6rem;border-radius:999px;cursor:pointer;font-size:.85rem;line-height:1;font-weight:600;transition:background .2s ease,color .2s ease;display:flex;align-items:center;gap:.35rem}
 .bstudy-btn:hover{background:var(--bg-tertiary);background:color-mix(in srgb,var(--bg-tertiary) 55%,transparent)}
 .bstudy-counter{padding:.35rem .6rem;border-radius:999px;font-size:.75rem;font-weight:600;color:var(--text-secondary);background:transparent}
-.bstudy-container{height:100vh;overflow-y:auto;scroll-behavior:smooth;background:var(--bg-primary);scroll-padding-top:0}
+.bstudy-container{height:100vh;overflow-y:auto;scroll-behavior:smooth;background:var(--bg-primary);scroll-padding-top:0;scroll-snap-type:none!important}
 .bstudy-container::-webkit-scrollbar{width:.5rem}
 .bstudy-container::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--text-muted) 35%,transparent);border-radius:999px}
-.bstudy-slide{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(1.5rem,3vw,3rem) clamp(1.2rem,4vw,4rem)}
+.bstudy-slide{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(1.5rem,3vw,3rem) clamp(1.2rem,4vw,4rem);scroll-snap-align:none!important;scroll-snap-stop:normal!important}
 .bstudy-slide .slide-content{max-width:min(1100px,95vw);width:100%;margin:0 auto;display:flex;flex-direction:column;justify-content:center;gap:clamp(.75rem,1.6vw,1.75rem);padding:clamp(1.25rem,2.8vw,2.75rem);background:transparent;border:none;box-shadow:none}
 .bstudy-slide h1{font-size:clamp(2.4rem,5vw,3.4rem);font-weight:700;color:var(--accent-primary);margin-bottom:.5rem;line-height:1.08;text-wrap:balance}
 .bstudy-slide h2{font-size:clamp(1.65rem,3.4vw,2.4rem);font-weight:650;color:var(--text-primary);margin-top:clamp(1rem,2vw,1.5rem);margin-bottom:.25rem;text-wrap:balance}
